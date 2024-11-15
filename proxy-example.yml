@@ -1,0 +1,23 @@
+http:
+  routers:
+    arbeit:
+      rule: Host(`arbeit.fritz.example.com`)
+      entrypoints: websecure
+      tls:
+        certresolver: myresolver
+      service: service-arbeit
+    zuhause:
+      rule: Host(`zuhause.fritz.example.com`)
+      entrypoints: websecure
+      tls:
+        certresolver: myresolver
+      service: service-zuhause
+  services:
+    service-arbeit:
+      loadBalancer:
+        servers:
+          - url: "https://aaaaaaaa.myfritz.net:444"
+    service-zuhause:
+      loadBalancer:
+        servers:
+          - url: "https://bbbbbbbb.myfritz.net:444"

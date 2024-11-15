@@ -1,0 +1,18 @@
+{
+  "zuhause": {
+    "protocol": "https",
+    "server": "bbbbbbbb.myfritz.net:444",
+    "username": "username",
+    "password": "password",
+    "callmonitorport": "1012",
+    "debug": true
+  },
+  "arbeit": {
+    "protocol": "https",
+    "server": "aaaaaaaa.myfritz.net:444",
+    "username": "username",
+    "password": "password",
+    "callmonitorport": "1012",
+    "debug": true
+  }
+}

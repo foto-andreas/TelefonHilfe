@@ -1,0 +1,200 @@
+{
+  "interactionModel": {
+    "languageModel": {
+      "invocationName": "telefon bedienen",
+      "intents": [
+        {
+          "name": "AMAZON.CancelIntent",
+          "samples": [
+            "Nix",
+            "Tschüss",
+            "Beenden",
+            "Nichts",
+            "Fertig",
+            "Abbrechen",
+            "Ende",
+            "Abbruch"
+          ]
+        },
+        {
+          "name": "AMAZON.HelpIntent",
+          "samples": [
+            "Was kann ich sagen",
+            "Was kann ich tun",
+            "Wie geht das",
+            "Hilf mir",
+            "Hilfe"
+          ]
+        },
+        {
+          "name": "AMAZON.StopIntent",
+          "samples": [
+            "Halt",
+            "Stop"
+          ]
+        },
+        {
+          "name": "AMAZON.NavigateHomeIntent",
+          "samples": [
+            "Nicht so",
+            "Nein",
+            "Nochmal",
+            "Von vorn"
+          ]
+        },
+        {
+          "name": "AMAZON.FallbackIntent",
+          "samples": []
+        },
+        {
+          "name": "MitNummerAnrufen",
+          "slots": [
+            {
+              "name": "nummer",
+              "type": "AMAZON.PhoneNumber"
+            }
+          ],
+          "samples": [
+            "Rufe {nummer} an",
+            "Ruf {nummer} an",
+            "{nummer}",
+            "{nummer} wählen",
+            "Wähle {nummer}",
+            "{nummer} anrufen"
+          ]
+        },
+        {
+          "name": "EintragSpeichern",
+          "slots": [
+            {
+              "name": "name",
+              "type": "AMAZON.Person"
+            },
+            {
+              "name": "nummer",
+              "type": "AMAZON.PhoneNumber"
+            }
+          ],
+          "samples": [
+            "Speichere {nummer} für {name}",
+            "Speichere {nummer} als {name}",
+            "Speichere {nummer} unter {name}",
+            "Speichere {name} mit Nummer {nummer}",
+            "Nummer {nummer} speichern für {name}"
+          ]
+        },
+        {
+          "name": "EintragLoeschen",
+          "slots": [
+            {
+              "name": "name",
+              "type": "AMAZON.Person"
+            }
+          ],
+          "samples": [
+            "Lösche {name}",
+            "{name} löschen",
+            "Eintrag {name} löschen",
+            "Eintrag für {name} löschen"
+          ]
+        },
+        {
+          "name": "NummerAnsagen",
+          "slots": [
+            {
+              "name": "name",
+              "type": "AMAZON.Person"
+            }
+          ],
+          "samples": [
+            "Such die Nummer von {name}",
+            "Gibt es {name} im Telefonbuch",
+            "Welche Nummer hat {name}",
+            "Gibt es {name}",
+            "Wie lautet die Nummer von {name}",
+            "Ist {name} gespeichert",
+            "Ist {name} im Telefonbuch",
+            "Nummer von {name}",
+            "Sag mir die Nummer von {name}",
+            "Wie ist die Nummer von {name}"
+          ]
+        },
+        {
+          "name": "MitNameAnrufen",
+          "slots": [
+            {
+              "name": "name",
+              "type": "AMAZON.Person"
+            }
+          ],
+          "samples": [
+            "{name} wählen",
+            "Mit {name} telefonieren",
+            "{name}",
+            "Ich möchte mit {name} telefonieren",
+            "Wähle {name}",
+            "Wähl {name}",
+            "Ruf {name} an",
+            "{name} anrufen"
+          ]
+        },
+        {
+          "name": "BasisFestlegen",
+          "slots": [
+            {
+              "name": "basis",
+              "type": "BasisType"
+            }
+          ],
+          "samples": [
+            "Basis {basis}",
+            "{basis} als Basis festlegen",
+            "Neue Basis ist {basis}",
+            "Neue Basis {basis}",
+            "Die Basis ist {basis}",
+            "Basis ist {basis}",
+            "Basis {basis} festlegen"
+          ]
+        },
+        {
+          "name": "BasisAnsagen",
+          "slots": [],
+          "samples": [
+            "Was ist als Basis festgelegt",
+            "Was ist als Basis gesetzt",
+            "Was ist die Basis",
+            "Ist eine Basis gesetzt",
+            "Ist eine Basis festgelegt",
+            "Sag mir die Basis",
+            "Welche Basis",
+            "Wie ist die Basis",
+            "Welches ist die Basis",
+            "Welche Basis ist festgelegt"
+          ]
+        }
+      ],
+      "types": [
+        {
+          "name": "BasisType",
+          "values": [
+            {
+              "name": {
+                "value": "untere"
+              }
+            },
+            {
+              "name": {
+                "value": "zuhause"
+              }
+            },
+            {
+              "name": {
+                "value": "mio"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
