@@ -1,5 +1,11 @@
 # Alexa-Skill: "Telefon bedienen"
 
+## Projektstatus
+
+* DEVELOPMENT!!
+* Keine Wartung
+* Wenig Zeit für Pflege
+
 Der Aufruf des Skills erfolgt mit **"Telefon bedienen"**. 
 Der Skill dient dazu, die Wählhilfe einer Fritz!Box zu steuern.
 
