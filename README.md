@@ -111,5 +111,13 @@ muss die Basis festgelegt werden.
 
 ## Installation ##
 
-Deploy auf AWS-Lambda. Das kann aber kein IPv6. Alternativ kann man irgendwo ein Traefik mit passender Weiterleitung 
-einrichten. Die Beispieldatei liegt als proxy.yml bei.
+* Alexa-Skill erzeugen und über die de-DE.json-Datei die Intents konfigurieren
+* Deploy des lambda-Verzeichnisses auf AWS-Lambda als Alexas-Hosted-Skill
+* In der Fritz!box die Wählhilfe einschalten und die Erreichbarkeit von außen erlauben
+* Einen passenden Benutzer auf der Fritz!box einrichten, ggf. Rechte einschränken 
+* Die Datei fritzboxen-example.json in fritzboxen.json umbenennen und die eigenen Fritz!box-Zugangsdaten (von außen erreichbar) eintragen.
+
+
+* Lambda kann aber kein IPv6. Wenn die eigenen Fritzbox nur per IPv6 erreichbar ist, kann man irgendwo auf einemn kleinen Server ein Traefik mit passender Weiterleitung 
+einrichten. Die Beispielkonfiguration liegt als proxy-example.yml bei.
+* 
