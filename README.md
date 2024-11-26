@@ -37,7 +37,18 @@ muss die Basis festgelegt werden.
 * Speichere {nummer} als {name}
 * Speichere {nummer} unter {name}
 * Speichere {name} mit Nummer {nummer}
+* Nummer {nummer} für {name} speichern
+* Nummer {nummer} als {name} speichern
+* Nummer {nummer} unter {name} speichern
+* Nummer {nummer} für {name} sichern
+* Nummer {nummer} als {name} sichern
+* Nummer {nummer} unter {name} sichern
+* Nummer {nummer} für {name} ablegen
+* Nummer {nummer} als {name} ablegen
+* Nummer {nummer} unter {name} ablegen
 * Nummer {nummer} speichern für {name}
+* Nummer {nummer} speichern als {name}
+* Nummer {nummer} speichern unter {name}
 
 ### Eintrag loeschen
 * Lösche {name}
@@ -81,7 +92,7 @@ muss die Basis festgelegt werden.
 ## Typen
 
 ### Mögliche Werte für Basis:
-* mio
+* ingrid
 * zuhause
 * untere
 

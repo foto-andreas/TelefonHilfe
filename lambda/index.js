@@ -11,7 +11,7 @@ const persistenceAdapter = require('ask-sdk-s3-persistence-adapter');
 /**
  * Bibliothek für Aktionen auf der Fritzbox.
  */
-const fritz = require('fritzbox.js')
+const fritz = require('@foto-andreas/fritzbox.js')
 
 /**
  * Definition der verfügbaren Basisstationen. Die Schlüssel dienen als Name der Basis. Die Verbindung geschieht
@@ -26,19 +26,44 @@ const fritz_options = require('./fritzboxen.json');
 let phonebook = {};
 let options = {};
 let deviceId = undefined;
+let basePhonebook = {};
 
 /**
  * Methode zum Wählen einer Nummer auf der Basis-Fritz!Box.
  */
 async function dial(number, basis) {
-    const status = await fritz.dialNumber(number, fritz_options[basis])
-    if (status.error) {
-        console.log('Error: ' + status.error.message);
-        return false;
-    } else {
-        console.log(status.message)
-        return true;
+    console.log("A");
+    try {
+        const status = await fritz.dialNumber(number, JSON.parse(JSON.stringify(fritz_options[basis])))
+        console.log("B");
+        if (status.error) {
+            console.log("C");
+            console.log('Error: ' + status.error.message, status.error, status);
+            return false;
+        } else {
+            console.log("D");
+            console.log(status.message)
+            return true;
+        }
+    } catch (e) {
+        console.log("ERROR: " + JSON.stringify(e));
     }
+}
+
+/**
+ * Methode zum Laden des Telefonbuchs der Basis-Fritz!Box.
+ */
+async function readBasePhonebook(basis) {
+    basePhonebook = {};
+    const pb = await fritz.getPhonebook(0, JSON.parse(JSON.stringify(fritz_options[basis])));
+    if (pb.error) {
+        console.log('Error: ' + pb.error.message);
+        return false;
+    }
+    pb.forEach(e => {
+        basePhonebook[e.name.toLowerCase()] = e.numbers[0].number;
+    });
+    console.log(basePhonebook);
 }
 
 /**
@@ -108,6 +133,11 @@ const LaunchRequestHandler = {
 
         await read(handlerInput);
 
+        const basis = options.basis[deviceId]
+
+        if (basis !== undefined)
+            readBasePhonebook(basis);
+
         const speakOutput = '"Telefon bedienen" ist startklar. Was kann ich für dich tun?';
         return handlerInput.responseBuilder
             .speak(speakOutput)
@@ -127,7 +157,9 @@ const MitNameAnrufenHandler = {
     async handle(handlerInput) {
         console.log('Mit Name anrufen.');
         const name = handlerInput.requestEnvelope.request.intent.slots.name.value;
-        const nummer = phonebook[name]
+        let nummer = phonebook[name];
+        if (nummer === undefined)
+            nummer = basePhonebook[name];
         if (nummer === undefined) {
             const speakOutput = `Es ist kein Eintrag für ${name} im Telefonbuch. Was soll ich tun?`;
             return handlerInput.responseBuilder
@@ -135,14 +167,15 @@ const MitNameAnrufenHandler = {
                 .reprompt('Was ist noch zu tun?')
                 .getResponse();
         } else {
-            const basis = options.basis[deviceId]
+            const basis = options.basis[deviceId];
             if (basis === undefined) {
-                const speakOutput = `Es ist keine Basis festgelegt. Das geht zum Beispiel mit dem Befehl "Basis MIO festlegen"`;
+                const speakOutput = `Es ist keine Basis festgelegt. Das geht zum Beispiel mit dem Befehl "Basis Ingrid festlegen"`;
                 return handlerInput.responseBuilder
                     .speak(speakOutput)
                     .reprompt('Was ist noch zu tun?')
                     .getResponse();
             }
+            console.log("versuche zu wählen: " + nummer + " auf Basis " + basis);
             if (await dial(nummer, basis)) {
                 const speakOutput = `Ich habe die Nummer von ${name} gefunden und gewählt. Es klingelt bei dir, wenn die Verbindung zustande kommt. Tschüss!`;
                 return handlerInput.responseBuilder
@@ -171,9 +204,9 @@ const MitNummerAnrufenHandler = {
     async handle(handlerInput) {
         console.log('Mit Nummer anrufen.');
         const nummer = handlerInput.requestEnvelope.request.intent.slots.nummer.value;
-        const basis = options.basis[deviceId]
+        const basis = options.basis[deviceId];
         if (basis === undefined) {
-            const speakOutput = `Es ist keine Basis festgelegt. Das geht zum Beispiel mit dem Befehl "Basis MIO festlegen"`;
+            const speakOutput = `Es ist keine Basis festgelegt. Das geht zum Beispiel mit dem Befehl "Basis Ingrid festlegen"`;
             return handlerInput.responseBuilder
                 .speak(speakOutput)
                 .reprompt('Was ist noch zu tun?')
@@ -206,7 +239,9 @@ const NummerAnsagenHandler = {
     async handle(handlerInput) {
         console.log('Nummer ansagen.');
         const name = handlerInput.requestEnvelope.request.intent.slots.name.value;
-        const nummer = phonebook[name]
+        let nummer = phonebook[name];
+        if (nummer === undefined)
+            nummer = basePhonebook[name];
         if (nummer === undefined) {
             const speakOutput = `Es ist kein Eintrag für ${name} im Telefonbuch. Was soll ich tun?`;
             return handlerInput.responseBuilder
@@ -233,7 +268,7 @@ const BasisAnsagenHandler = {
     },
     async handle(handlerInput) {
         console.log('Basis ansagen.');
-        const basis = options.basis[deviceId]
+        const basis = options.basis[deviceId];
         if (basis === undefined) {
             const speakOutput = `Es ist keine Basis festgelegt. Was soll ich tun?`;
             return handlerInput.responseBuilder
@@ -297,12 +332,13 @@ const BasisFestlegenHandler = {
         const basis = handlerInput.requestEnvelope.request.intent.slots.basis.value;
         if (basis === undefined) {
             return handlerInput.responseBuilder
-                .speak("Ich habe den Namen der Basis nicht verstanden. Es ist ZUHAUSE, MIO oder UNTERE erlaubt. Kannst du den Befehl bitte wiederholen?")
+                .speak("Ich habe den Namen der Basis nicht verstanden. Es ist ZUHAUSE, Ingrid oder UNTERE erlaubt. Kannst du den Befehl bitte wiederholen?")
                 .reprompt('Was ist noch zu tun?')
                 .getResponse();
         }
         options.basis[deviceId] = basis;
         await save(handlerInput);
+        readBasePhonebook(basis);
         const speakOutput = `Es wurde ${basis} als Basis festgelegt. Was ist noch zu tun?`;
         return handlerInput.responseBuilder
             .speak(speakOutput)
@@ -356,9 +392,9 @@ const HelpIntentHandler = {
             Du kannst auch die Nummer eines Telefonbucheintrags ansagen lassen. Dazu sag "Wie ist die Nummer von Andreas".
             
             Damit ich weiß, wie ich dein Telefon erreiche, muss einmalig eine Basis hinterlegt sein. 
-            Das machst du mit "Basis mio". Das muss nur einmal gemacht werden, danach ist es wie die Einträge im Telefonbuch gespeichert.
+            Das machst du mit "Basis Ingrid". Das muss nur einmal gemacht werden, danach ist es wie die Einträge im Telefonbuch gespeichert.
             
-            Als Basis ist eine der Angaben "mio", "zuhause" oder "untere" möglich. Die Basis wird pro Alexa-Gerät getrennt gespeichert,
+            Als Basis ist eine der Angaben "Ingrid", "zuhause" oder "untere" möglich. Die Basis wird pro Alexa-Gerät getrennt gespeichert,
             da das benutzte Alexa-Gerät vermutlich in der Nähe des benutzten Telefons steht.
                         
             Und wenn gar nichts mehr geht, Andreas fragen!
@@ -383,6 +419,7 @@ const CancelAndStopIntentHandler = {
         const speakOutput = 'Tschüss!';
         return handlerInput.responseBuilder
             .speak(speakOutput)
+            .withShouldEndSession(true)
             .getResponse();
     }
 };
@@ -421,6 +458,7 @@ const SessionEndedRequestHandler = {
         // Any cleanup logic goes here.
         return handlerInput.responseBuilder
             .speak('Tschüss!')
+            .withShouldEndSession(true)
             .getResponse(); // notice we send an empty response
     }
 };

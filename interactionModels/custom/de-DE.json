@@ -80,7 +80,18 @@
             "Speichere {nummer} als {name}",
             "Speichere {nummer} unter {name}",
             "Speichere {name} mit Nummer {nummer}",
-            "Nummer {nummer} speichern für {name}"
+            "Nummer {nummer} unter {name} speichern",
+            "Nummer {nummer} als {name} speichern",
+            "Nummer {nummer} für {name} speichern",
+            "Nummer {nummer} unter {name} sichern",
+            "Nummer {nummer} als {name} sichern",
+            "Nummer {nummer} für {name} sichern",
+            "Nummer {nummer} unter {name} ablegen",
+            "Nummer {nummer} als {name} ablegen",
+            "Nummer {nummer} für {name} ablegen",
+            "Nummer {nummer} speichern für {name}",
+            "Nummer {nummer} speichern als {name}",
+            "Nummer {nummer} speichern unter {name}"
           ]
         },
         {
@@ -190,6 +201,11 @@
             {
               "name": {
                 "value": "mio"
+              }
+            },
+            {
+              "name": {
+                "value": "ingrid"
               }
             }
           ]
